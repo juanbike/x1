@@ -1,0 +1,27 @@
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 20%;
+}
+
+
+
+.th-center{
+  text-align: center;
+}
+.th-left{
+  text-align: left;
+}
+.th-right{
+  text-align: right;
+}
+
+
+/* Agregar estilos para la alineación horizontal de los botones */
+.example-button-row-horizontal {
+  display: flex; /* Utilizar flexbox para alinear elementos horizontalmente */
+  gap: 40px; /* Espacio entre los botones */
+}

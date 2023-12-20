@@ -1,0 +1,27 @@
+.my-dialog {
+  /* Estilos personalizados para el cuadro de diálogo */
+  background-color: #961717; /* Color de fondo */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  /* Agrega cualquier otro estilo personalizado que desees */
+ .campo-container {
+    margin-bottom: 15px;
+  }
+
+  .boton-container {
+    text-align: center;
+    margin-top: 15px;
+  }
+}
+
+
+.formulario-container {
+  max-width: 400px;
+  margin: auto;
+}
+
+.my-dialog .container{
+  padding: 20px;
+  background-color: #5313b9;
+  color: #961717;
+}

@@ -1,0 +1,35 @@
+<div class="modal">
+  <div class="modal-content">
+    <p>
+      Esta seguro que desea eliminar una junta: {{ juntaHijo.lineaOSistema }}
+    </p>
+    <p>`{{ juntaHijo.id }}`</p>
+    <div class="modal-actions">
+      <button mat-raised-button color="primary" (click)="notificarPadre(true)">
+        Okay
+      </button>
+      <button mat-raised-button color="warn" (click)="notificarPadre(true)">
+        Cancelar
+      </button>
+    </div>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput formControlName="nominal" placeholder="Nominal" required>
+        <mat-error *ngIf="myForm.controls['nominal'].hasError('required')">El campo es obligatorio</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>First name</mat-label>
+        <input matInput (cdkAutofill)="firstNameAutofilled = $event.isAutofilled">
+        @if (firstNameAutofilled) {
+          <mat-hint>Autofilled!</mat-hint>
+        }
+      </mat-form-field>
+
+      <!-- Repite este bloque para los demás campos -->
+
+      <button mat-raised-button color="primary" type="submit">Enviar</button>
+    </form>
+  </div>
+
+</div>
