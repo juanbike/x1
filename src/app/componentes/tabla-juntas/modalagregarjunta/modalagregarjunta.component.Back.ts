@@ -1,31 +1,42 @@
-import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
+//IMportaciones para el formulario
 import { MatButtonModule } from '@angular/material/button'; //botones
 import { MatIconModule } from '@angular/material/icon'; //iconos
 import { MatFormFieldModule } from '@angular/material/form-field'; //
 import { ReactiveFormsModule } from '@angular/forms'; //validaciones
 import { TextFieldModule } from '@angular/cdk/text-field'; //textfield
-import {MatInputModule} from '@angular/material/input'; //
-
-//import {MatDialogModule} from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input'; //
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { CdkStepperModule } from '@angular/cdk/stepper'; //
+
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+
 @Component({
-  selector: 'app-modal',
+  selector: 'app-modalagregarjunta',
   standalone: true,
   imports: [
-    CommonModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     TextFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatCardModule,
+    CdkStepperModule,
+    CdkTableModule,
+    MatDividerModule,
+    MatToolbarModule,
+    MatTableModule,
   ],
-  templateUrl: './modal.component.html',
-  styleUrl: './modal.component.css',
+  templateUrl: './modalagregarjunta.component.html',
+  styleUrl: './modalagregarjunta.component.css',
 })
-export class ModalComponent implements OnInit {
+export class ModalagregarjuntaComponent implements OnInit {
   myForm!: FormGroup;
   firstNameAutofilled!: boolean;
   lastNameAutofilled!: boolean;
@@ -51,34 +62,14 @@ export class ModalComponent implements OnInit {
 
   onSubmit() {
     // Aquí puedes manejar la lógica de envío del formulario
-    console.log("modal", this.myForm.value);
+    console.log(this.myForm.value);
   }
 
-  //
-  @Input() juntaHijo!: {
-    id: number;
-    nominal: string;
-    nominal1: string;
-    lineaOSistema: string;
-    especificacion: string;
-    schedule: string;
-    tipo_extremos: string;
-    tipo_material: string;
-    material: string;
-    diam_inch_contabilizadas: string;
-    factor_pulgadas_diametrales: string;
-    pulgadas_diametrales: string;
-    fecha: string;
-    proyectID: string;
-    usuarioID: string;
-  }; // Datos de la junta hijo que vienen del componente padre
+  @Output() miEventoAlPadre: EventEmitter<boolean> =
+    new EventEmitter<boolean>(); // propiedad 'output'  para enviar datos al componente padre
 
-  @Output() miEvento: EventEmitter<boolean> = new EventEmitter<boolean>(); // propiedad 'output'  para enviar datos al componente padre
-
-  notificarPadre(value: boolean) {
+  notificarPadreJunta(value: boolean) {
     // Evento para enviar datos al componente padre
-    this.miEvento.emit(value);
-  };
-
-
+    this.miEventoAlPadre.emit(value);
+  }
 }

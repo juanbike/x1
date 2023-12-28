@@ -21,4 +21,20 @@ export class JuntaServiceService {
     return this.http.get<Junta_interface>(`${this.apiUrl}/${id}`);
   }
 
+   //Delete junta by id
+   onDeleteJunta(id: string): Observable<Junta_interface> {
+    return this.http.delete<Junta_interface>(`${this.apiUrl}/${id}`);
+  }
+
+
+  //Create Junta
+  onJuntaCreate(  juntas:{ nominal: string, nominal1: string, lineaOSistema: string, especificacion: string, schedule: string,
+    tipo_extremos: string, tipo_material: string, material: string, diam_inch_contabilizadas: string,
+    factor_pulgadas_diametrales: string, pulgadas_diametrales: string, proyectID: string, usuarioID: string}): Observable<Junta_interface> { {
+     return this.http.post<Junta_interface>(this.apiUrl, juntas);
+    }
+  }
+
+
+
 }

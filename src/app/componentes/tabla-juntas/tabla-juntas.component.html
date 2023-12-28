@@ -137,6 +137,8 @@
     aria-label="Select page of users"
   ></mat-paginator>
 
+
+  <!-- Modal para confirmar eliminación -->
   @if(showConfirmDeleteComponent){
   <div>
     <app-modal
@@ -146,6 +148,8 @@
   </div>
   }
 
+
+  <!-- Modal para agregar junta -->
   @if(showModalAgregarJuntas){
   <div>
     <app-modalagregarjunta
@@ -153,6 +157,15 @@
     ></app-modalagregarjunta>
   </div>
 }
+
+
+<!-- Mensaje de confirmación de eliminación -->
+  @if(messageText){
+    <div class="alert alert-success" role="alert">
+      {{messageText}}
+    </div>
+  }
+
 
 
 </div>

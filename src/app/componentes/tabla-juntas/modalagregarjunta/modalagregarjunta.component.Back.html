@@ -1,0 +1,19 @@
+<div class="modal">
+  <div class="modal-content">
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput formControlName="nominal" placeholder="Nominal" required>
+        <mat-error *ngIf="myForm.get('nominal').hasError('required')">El campo es obligatorio</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>First name</mat-label>
+        <input matInput (cdkAutofill)="firstNameAutofilled = $event.isAutofilled">
+        <mat-hint *ngIf="firstNameAutofilled">Autofilled!</mat-hint>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" (click)="notificarPadreJunta(true)">Enviar</button>
+    </form>
+
+</div>
+</div>

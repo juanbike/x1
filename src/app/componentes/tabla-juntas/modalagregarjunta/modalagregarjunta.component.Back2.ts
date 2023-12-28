@@ -5,8 +5,7 @@ import {
   FormGroup,
   FormsModule,
   Validators,
-  FormControl,
-  AbstractControl
+  FormControl
 } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,12 +27,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 
-import {
-  HttpClient,
-  HttpClientModule,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+
 
 //interface y servicio
 
@@ -64,20 +59,36 @@ import { Junta_interface } from '../../../data/interface/juntas';
     MatDividerModule,
     MatToolbarModule,
     MatTableModule,
+
   ],
   templateUrl: './modalagregarjunta.component.html',
   styleUrl: './modalagregarjunta.component.css',
 })
-export class ModalagregarjuntaComponent {
+export class ModalagregarjuntaComponent implements OnInit {
+
   allJuntas: Junta_interface[] = []; //listado de juntas
 
-  constructor(
-    private http: HttpClient,
-    private juntasService: JuntaServiceService,
-    private builder: FormBuilder
-  ) {}
+  constructor(private http: HttpClient, private juntasService: JuntaServiceService, private builder: FormBuilder) { }
+
+  onJuntaCreate(juntas:{ nominal: string, nominal1: string, lineaOSistema: string, especificacion: string, schedule: string,
+    tipo_extremos: string, tipo_material: string, material: string, diam_inch_contabilizadas: string,
+    factor_pulgadas_diametrales: string, pulgadas_diametrales: string, proyectID: string, usuarioID: string}): void{
+    this.juntasService.onJuntaCreate(juntas).subscribe(
+      (response: Junta_interface) => {
+        this.allJuntas.push(response);
+      },
+      (error: HttpErrorResponse) => {
+        console.log('Error al crear la junta', error);
+        // Muestro mensaje de error
+      }
+    );
+
+  }
+
 
   formGroup!: FormGroup; // Defnimos el nombre del Formulario
+
+
 
   @Output() miEventoAlPadre: EventEmitter<boolean> =
     new EventEmitter<boolean>(); // propiedad 'output'  para enviar datos al componente padre
@@ -92,9 +103,9 @@ export class ModalagregarjuntaComponent {
   nominal1list = [
     '1/2"',
     '1"',
-    '1 1/2',
+    '1 1/2"',
     '2"',
-    '2 1/2',
+    '2 1/2"',
     '3"',
     '3/4"',
     '4"',
@@ -168,11 +179,11 @@ export class ModalagregarjuntaComponent {
     '604-CCPSL-PIP-E3D-Zone C-Phase 2-Service Water System',
     '604-CCPSL-PIP-E3D-Zone C-Service Water System',
     '605-CCPSL-PIP-E3D-Rack-Demin Water Storage and Distribution System',
-    "605-CCPSL-PIP-E3D-Rack-Phase 2-Demin Water Storage and Distribution System",
+    '605-CCPSL-PIP-E3D-Rack-Phase 2-Demin Water Storage and Distribution System',
     '605-CCPSL-PIP-E3D-Zone B-Demin Water Storage and Distribution System',
-    "605-CCPSL-PIP-E3D-Zone B-Phase 2-Demin Water Storage and Distribution System",
+    '605-CCPSL-PIP-E3D-Zone B-Phase 2-Demin Water Storage and Distribution System',
     '605-CCPSL-PIP-E3D-Zone C-Demi Water Storage and Distribution System',
-    "605-CCPSL-PIP-E3D-Zone-C-Phase-2-Demi-Water-Storage-and-Distribution-System",
+    '605-CCPSL-PIP-E3D-Zone C-Phase 2-Demi Water Storage and Distribution System',
     '606-CCPSL-PIP-E3D-Rack-HP Drain Steam System',
     '606-CCPSL-PIP-E3D-Zone C-Phase 2-HP Steam System',
     '606-CCPSL-PIP-E3D-Zone C-Phase 2-LP13 Steam System',
@@ -311,146 +322,65 @@ export class ModalagregarjuntaComponent {
     '4,3',
   ];
 
+  //constructor(private builder: FormBuilder) {}
 
-  juntasForm = new FormGroup({
-    nominal: new FormControl('', [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(20),
-    ]),
-    nominal1: new FormControl('', [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(20),
-    ]),
-    lineaOSistema: new FormControl('', [
-      Validators.required,
-      
-    ]),
-    especificacion: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(8),
-    ]),
-    schedule: new FormControl('', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(9),
-    ]),
-    tipo_extremos: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(20),
-    ]),
-    tipo_material: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(26),
-    ]),
-    material: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(43),
-    ]),
-    diam_inch_contabilizadas: new FormControl('', [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(6),
-      this.onlyNumbersValidator,
-    ]),
-    factor_pulgadas_diametrales: new FormControl('', [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(6),
-    ]),
-    pulgadas_diametrales: new FormControl('', [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(6),
-      this.onlyNumbersValidator,
-    ]),
-    usuarioID: new FormControl(''),
-    proyectID: new FormControl(''),
+  ngOnInit(): void {
+    this.customerform.setValue({
+      name: 'Nihira Techiees',
+      email: 'nihiratechiees@gmail.com',
+      phone: '77678899',
+      country: 'USA',
+      term: '45days',
+      address: 'add1',
+      dob: new Date(2001, 2, 3),
+      gender: 'Male',
+      status: true,
+      Nominal1: '',
+      Nominal2: '',
+      Sistema: '',
+      Especificacion: '',
+      Schedule: '',
+      Tipo_Extremo: '',
+      Tipo_Material: '',
+      Material: '',
+      PulgadasDiametralesContabilizadas: '',
+      Factor_Pulgadas_Diametrales: '',
+      Pulgadas_Diametrales: '',
+    });
+  }
+
+  customerform = this.builder.group({
+    name: this.builder.control('', Validators.required),
+    email: this.builder.control(
+      '',
+      Validators.compose([Validators.required, Validators.required])
+    ),
+    phone: this.builder.control('', Validators.required),
+    country: this.builder.control('', Validators.required),
+    address: this.builder.control('', Validators.required),
+    term: this.builder.control('', Validators.required),
+    dob: this.builder.control(new Date(2000, 3, 25)),
+    gender: this.builder.control('Male'),
+    status: this.builder.control(true),
+    Nominal1: this.builder.control('', Validators.required),
+    Nominal2: this.builder.control('', Validators.required),
+    Sistema: this.builder.control('', Validators.required),
+    Especificacion: this.builder.control('', Validators.required),
+    Schedule: this.builder.control('', Validators.required),
+    Tipo_Extremo: this.builder.control('', Validators.required),
+    Tipo_Material: this.builder.control('', Validators.required),
+    Material: this.builder.control('', Validators.required),
+    PulgadasDiametralesContabilizadas: this.builder.control('', Validators.required),
+    Factor_Pulgadas_Diametrales: this.builder.control('', Validators.required),
+    Pulgadas_Diametrales: this.builder.control('', Validators.required),
+    //Factor_Pulgadas_Diametrales: this.builder.control('') // Factor Pulgadas Diametrales
   });
 
   SaveCustomer() {
-    console.log(this.juntasForm.value);
+    console.log(this.customerform.value);
   }
 
   clearform() {
-    this.juntasForm.reset();
+    this.customerform.reset();
   }
-
-  onJuntaCreate(): void {
-    console.log(this.juntasForm.value);
-    // Obtén los valores del formulario
-    const datosJuntas = this.juntasForm.value;
-    // creamos un objeto con los campos que necesitamos enviar al servicio
-    const nuevaJunta = {
-      /*
-      Se utilizan operadores de fusión nula (||) para proporcionar valores predeterminados vacíos en caso de que los campos del formulario
-       sean null o undefined
-      */
-      "nominal": this.juntasForm.value.nominal || '',
-      "nominal1": this.juntasForm.value.nominal1 || '',
-      "lineaOSistema": this.juntasForm.value.lineaOSistema || '',
-      "especificacion": this.juntasForm.value.especificacion || '',
-      "schedule": this.juntasForm.value.schedule || '',
-      "tipo_extremos": this.juntasForm.value.tipo_extremos || '',
-      "tipo_material": this.juntasForm.value.tipo_material || '',
-      "material": this.juntasForm.value.material || '',
-      "diam_inch_contabilizadas":
-        this.juntasForm.value.diam_inch_contabilizadas || '',
-        "factor_pulgadas_diametrales":
-        this.juntasForm.value.factor_pulgadas_diametrales || '',
-        "pulgadas_diametrales": this.juntasForm.value.pulgadas_diametrales || '',
-        "usuarioID": this.juntasForm.value.usuarioID || '',
-        "proyectID": this.juntasForm.value.proyectID || '',
-    };
-
-    // Llama al servicio con el objeto creado
-    this.juntasService.onJuntaCreate(nuevaJunta).subscribe(
-      (response: Junta_interface) => {
-        this.allJuntas.push(response);
-        // Puedes mostrar un mensaje de éxito aquí si es necesario
-        console.log('Junta creada exitosamente.');
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Error al crear la junta', error);
-        // Muestra un mensaje de error al usuario
-      }
-    );
-
-
-  }
-
-
-
-
-  // Validador personalizado para aceptar solo números
-  onlyNumbersValidator(control: AbstractControl): { [key: string]: any } | null {
-    const value = control.value;
-    const valid = /^\d+(\.\d+)?$/.test(value); // Permite números enteros o decimales
-
-    return valid ? null : { onlyNumbers: true };
-  }
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-

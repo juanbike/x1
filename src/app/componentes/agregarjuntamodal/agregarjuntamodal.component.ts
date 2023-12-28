@@ -1,49 +1,42 @@
 import {Component} from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogModule
-} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { CommonModule } from '@angular/common';
+
+import { HttpClient, HttpClientModule, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+
+import { NgForm } from '@angular/forms';
 
 
-/**
- * @title Dialog Animations
- */
-@Component({
-  selector: 'app-agregarjuntamodal',
-  styleUrls: ['agregarjuntamodal.component.css'],
-  templateUrl: 'agregarjuntamodal.component.html',
-  standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatDialogModule],
-})
-export class DialogAnimationsExample {
-  constructor(public dialog: MatDialog) {}
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    this.dialog.open(AgregarjuntamodalComponent, {
-      width: '250px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-    });
-  }
+//interface y servicio
+import { Junta_interface } from '../../data/interface/juntas'; //importamos la interface
+import { JuntaServiceService } from '../../data/junta-service.service'; //importamos el servicio
 
-}
 
 @Component({
   selector: 'app-agregarjuntamodal',
   standalone: true,
-  imports: [ MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, MatButtonModule, MatDialogModule ],
+  imports: [ CommonModule],
   templateUrl: './agregarjuntamodal.component.html',
   styleUrl: './agregarjuntamodal.component.css'
 })
 export class AgregarjuntamodalComponent {
-  constructor(public dialogRef: MatDialogRef<AgregarjuntamodalComponent>) {}
+  allJuntas: Junta_interface[] = []; //listado de juntas
+  constructor(private http: HttpClient, private juntasService: JuntaServiceService) { }
+
+
+  onJuntaCreate(juntas:{ nominal: string, nominal1: string, lineaOSistema: string, especificacion: string, schedule: string,
+    tipo_extremos: string, tipo_material: string, material: string, diam_inch_contabilizadas: string,
+    factor_pulgadas_diametrales: string, pulgadas_diametrales: string, proyectID: string, usuarioID: string}): void{
+    this.juntasService.onJuntaCreate(juntas).subscribe(
+      (response: Junta_interface) => {
+        this.allJuntas.push(response);
+      },
+      (error: HttpErrorResponse) => {
+        console.log('Error al crear la junta', error);
+        // Muestro mensaje de error
+      }
+    );
+
+  }
+
 
 }
