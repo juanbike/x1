@@ -63,8 +63,6 @@ Muestra una notificación al usuario.
 ********************************************************************
 */
 
-
-
   openSnackBar(message: string, action: string) {
     const config = new MatSnackBarConfig();
     config.panelClass = ['blue-snackbar'];

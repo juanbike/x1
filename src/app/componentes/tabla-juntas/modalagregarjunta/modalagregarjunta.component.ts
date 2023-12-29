@@ -27,6 +27,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import {
   HttpClient,
@@ -74,7 +75,8 @@ export class ModalagregarjuntaComponent {
   constructor(
     private http: HttpClient,
     private juntasService: JuntaServiceService,
-    private builder: FormBuilder
+    private builder: FormBuilder,
+    private snackBar: MatSnackBar //inicializamos el snackbar para mostrar notificaciones al usuario
   ) {}
 
   formGroup!: FormGroup; // Defnimos el nombre del Formulario
@@ -86,6 +88,32 @@ export class ModalagregarjuntaComponent {
     // Evento para enviar datos al componente padre
     this.miEventoAlPadre.emit(value);
   }
+
+
+
+  /*
+********************************************************************
+Muestra una notificación al usuario.
+********************************************************************
+*/
+
+openSnackBar(message: string, action: string) {
+  const config = new MatSnackBarConfig();
+  config.panelClass = ['blue-snackbar'];
+  config.horizontalPosition = 'end'; // Posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
+  config.verticalPosition = 'top'; // Posición vertical: 'top' | 'bottom'
+  config.duration = 3000; // Duración en milisegundos (opcional)
+  this.snackBar.open(message, action, config);
+}
+
+
+  /*
+********************************************************************
+Cargamos los select del formulario con los datos de los arrays
+********************************************************************
+*/
+
+
 
   countrylist = ['India', 'USA', 'Singapore', 'UK'];
   termlist = ['15days', '30days', '45days', '60days'];
@@ -312,6 +340,14 @@ export class ModalagregarjuntaComponent {
   ];
 
 
+   /*
+********************************************************************
+Validamos el formulario
+Representamos y validamos el conjunto de datos para el formulario
+********************************************************************
+*/
+
+
   juntasForm = new FormGroup({
     nominal: new FormControl('', [
       Validators.required,
@@ -325,7 +361,7 @@ export class ModalagregarjuntaComponent {
     ]),
     lineaOSistema: new FormControl('', [
       Validators.required,
-      
+
     ]),
     especificacion: new FormControl('', [
       Validators.required,
@@ -381,6 +417,14 @@ export class ModalagregarjuntaComponent {
     this.juntasForm.reset();
   }
 
+
+
+ /*
+********************************************************************
+Creamos una nueva junta y enviamos los datos al servicio para crearla en la base de datos
+********************************************************************
+*/
+
   onJuntaCreate(): void {
     console.log(this.juntasForm.value);
     // Obtén los valores del formulario
@@ -408,15 +452,25 @@ export class ModalagregarjuntaComponent {
         "proyectID": this.juntasForm.value.proyectID || '',
     };
 
+
+    /*
+********************************************************************
+Enviamos la junta al servico para crearla en la base de datos.
+********************************************************************
+*/
+
+
     // Llama al servicio con el objeto creado
     this.juntasService.onJuntaCreate(nuevaJunta).subscribe(
       (response: Junta_interface) => {
         this.allJuntas.push(response);
         // Puedes mostrar un mensaje de éxito aquí si es necesario
-        console.log('Junta creada exitosamente.');
+        //console.log('Junta creada exitosamente.');
+        this.openSnackBar('Junta creada exitosamente', 'Cerrar');
       },
       (error: HttpErrorResponse) => {
         console.error('Error al crear la junta', error);
+        this.openSnackBar('Error al crear la junta', 'Cerrar');
         // Muestra un mensaje de error al usuario
       }
     );
@@ -425,9 +479,12 @@ export class ModalagregarjuntaComponent {
   }
 
 
+     /*
+******************************************************************************************
+// Validador personalizado para aceptar solo números enteros o decimales Een el formulario
+*****************************************************************************************
+*/
 
-
-  // Validador personalizado para aceptar solo números
   onlyNumbersValidator(control: AbstractControl): { [key: string]: any } | null {
     const value = control.value;
     const valid = /^\d+(\.\d+)?$/.test(value); // Permite números enteros o decimales
