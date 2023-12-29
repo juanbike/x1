@@ -11,7 +11,7 @@ import { JuntaServiceService } from '../../data/junta-service.service'; //import
 import { MatTableModule, MatTableDataSource } from '@angular/material/table'; //tabla
 import { MatButtonModule } from '@angular/material/button'; //botones
 import { MatIconModule } from '@angular/material/icon'; //iconos
-import { ModalComponent } from './modal/modal.component'; //componente modal
+import { ModalComponent } from './modal/modal.component'; //componente modal para eliminar una junta
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator'; //paginador
 import { MatPaginatorModule } from '@angular/material/paginator'; //paginador
@@ -20,11 +20,12 @@ import { MatInputModule } from '@angular/material/input'; //input
 import { PaginationService } from '../../services/paginacion/pagination.service'; //paginacion
 import { MatSort } from '@angular/material/sort'; //ordenamiento
 import { ModalagregarjuntaComponent } from './modalagregarjunta/modalagregarjunta.component';
-//import { AgregarjuntaService } from '../agregarjunta/service/agregarjunta/agregarjunta.service'; //agregarjunta
-//import { AgregarjuntaComponent } from '../agregarjunta/agregarjunta.component';
-//import { MatDialog } from '@angular/material/dialog';
-//import { AgregarjuntamodalComponent } from '../agregarjuntamodal/agregarjuntamodal.component';
+import { MatDialog } from '@angular/material/dialog'; //Cuadro de dialogo
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
+import { BoxDialogComponent } from '../box-dialog/box-dialog.component';
+
+import { NotificationsComponent } from '../notifications/notifications.component';
 @Component({
   selector: 'app-tabla-juntas',
   standalone: true,
@@ -41,6 +42,7 @@ import { ModalagregarjuntaComponent } from './modalagregarjunta/modalagregarjunt
     MatInputModule,
     ModalagregarjuntaComponent,
     ReactiveFormsModule,
+    NotificationsComponent,
   ], //importamos los modulos
   templateUrl: './tabla-juntas.component.html',
   styleUrl: './tabla-juntas.component.css',
@@ -48,17 +50,58 @@ import { ModalagregarjuntaComponent } from './modalagregarjunta/modalagregarjunt
 export class TablaJuntasComponent {
   constructor(
     private http: HttpClient,
-    private juntasService: JuntaServiceService,
-    private paginationService: PaginationService
+    private juntasService: JuntaServiceService, //inicializamos el servicio
+    private paginationService: PaginationService, //inicializamos el paginador
+    public dialog: MatDialog, //inicializamos el cuadro de dialogo: Eliminar Junta
+    private snackBar: MatSnackBar //inicializamos el snackbar para mostrar notificaciones al usuario
   ) {}
 
+
+/*
+********************************************************************
+Muestra una notificación al usuario.
+********************************************************************
+*/
+
+
+
+  openSnackBar(message: string, action: string) {
+    const config = new MatSnackBarConfig();
+    config.panelClass = ['blue-snackbar'];
+    config.horizontalPosition = 'end'; // Posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
+    config.verticalPosition = 'top'; // Posición vertical: 'top' | 'bottom'
+    config.duration = 3000; // Duración en milisegundos (opcional)
+    this.snackBar.open(message, action, config);
+  }
+
+
   /*
-  openDialog(): void {
-    const dialogRef = this.dialog.open(AgregarjuntamodalComponent, {
+********************************************************************
+Muestra una cuadro de notificación al usuario.
+********************************************************************
+*/
+
+
+  openConfirmDialog(): void {
+    const dialogRef = this.dialog.open(BoxDialogComponent, {
       width: '250px',
     });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.openSnackBar('Registro eliminado', 'Cerrar');
+        // El usuario hizo clic en "Eliminar"
+        // Aquí puedes implementar la lógica de eliminación del registro
+        console.log('Registro eliminado');
+      } else {
+        // El usuario hizo clic en "Cancelar" o cerró el cuadro de diálogo
+        console.log('Eliminación cancelada');
+        this.openSnackBar('Eliminación cancelada', 'Cerrar');
+      }
+    });
   }
-*/
+
+
 
   allJuntas: Junta_interface[] = []; //arreglo de juntas
   datosDesdeHijo!: string;
@@ -94,8 +137,15 @@ export class TablaJuntasComponent {
     'Acciones',
   ]; // Columnas de la tabla
 
-  //Propiedad utilizada para enviar los datos de la junta al componente modal
 
+
+
+
+/*
+********************************************************************************************
+Relenamos el Json JuntaPadre con datos para enviarlos al componente modal modal.component.ts
+*********************************************************************************************
+*/
 
   juntaPadre: {
     id: number;
@@ -133,14 +183,24 @@ export class TablaJuntasComponent {
 
 
 
+/*
+********************************************************************
+Metodo para obtener los datos de la API y mostrarlos en la tabla
+********************************************************************
+*/
 
 
-  //Metodo para obtener los datos de la API y mostrarlos en la tabla
   ngOnInit(): void {
     this.fetchJuntas();
   }
 
-  //Metodo para obtener los datos de la API y mostrarlos en la tabla
+/*
+********************************************************************
+  Metodo para obtener los datos de la API y mostrarlos en la tabla
+********************************************************************
+*/
+
+
   private fetchJuntas() {
     // Muestra un indicador de carga mientras se realiza la solicitud
     this.isLoading = true;
@@ -177,7 +237,15 @@ export class TablaJuntasComponent {
     }, timeout);
   }
 
-  //Metodo para eliminar una junta
+
+
+  /*
+********************************************************************
+  Metodo para encontrar una junta
+********************************************************************
+*/
+
+
   OnDeleteClicked(id: string): void {
     this.showConfirmDeleteComponent = true; // Mostrar el componente modal
     // Utiliza el método 'filter' para encontrar el objeto en 'allJuntas' con la propiedad 'id' igual al valor de 'id'.
@@ -188,7 +256,7 @@ export class TablaJuntasComponent {
     if (juntaEncontrada) {
       this.onDeleteJunta(juntaEncontrada.id);
 
-      // Assign the found user to the 'juntaPadre' property of the modal component
+      // Asignar el usuario encontrado a la propiedad 'juntaPadre' del componente modal
       this.juntaPadre = { ...juntaEncontrada }; // Using spread operator to create a copy
       // Muestra el usuario en formato de cadena en la consola
     } else {
@@ -196,43 +264,12 @@ export class TablaJuntasComponent {
     }
   }
 
-  //Metodo para eliminar una junta
 
   /*
-  onDeleteJunta(id: string): void {
-    this.showConfirmDeleteComponent = true; // Mostrar el componente modal
-   // Utiliza el método 'filter' para encontrar el objeto en 'allJuntas' con la propiedad 'id' igual al valor de 'id'.
-   const usuariosEncontrados = this.juntas.filter(
-     (junta: { id: string; }) => junta.id === id
-   );
-   // Verifica si se encontró algún usuario
-   if (usuariosEncontrados.length > 0) {
-     // Extrae la información del primer usuario encontrado (puedes ajustar según tus necesidades)
-     const usuarioEnString = JSON.stringify(usuariosEncontrados[0]);
-     // Convierte la información del usuario a un objeto
-     const usuarioEnObjeto = JSON.parse(usuarioEnString);
-     console.log('usuarioJson', usuarioEnObjeto);
-     // Asigna el objeto a la propiedad 'juntaPadre' del componente modal
-     this.juntaPadre = usuarioEnObjeto;
-     // Muestra el usuario en formato de cadena en la consola
-     console.log(usuarioEnString);
-   } else {
-     console.log('Usuario no encontrado');
-   }
- }
-
-
+********************************************************************
+  Metodo para eliminar una junta
+********************************************************************
 */
-
-
-
-
-
-
-
-
-
-
 
 
   onDeleteJunta(id: string): void {
@@ -244,50 +281,34 @@ export class TablaJuntasComponent {
         this.fetchJuntas(); // Recarga la tabla con los nuevos datos
       },
       (error: HttpErrorResponse) => {
-        this.handleError('Error al eliminar la junta', error);
+        //this.handleError('Error al eliminar la junta', error);
       }
     );
   }
 
-  private handleSuccess(message: string): void {
-    this.showMessageWithTimeout(message, 3000);
-  }
 
-  private handleError(errorMessage: string, error: HttpErrorResponse): void {
-    console.error(`${errorMessage}: ${error.message}`);
-    // Muestra mensaje de error
-    this.showMessageWithTimeout(errorMessage, 3000);
-  }
-
-
-
-
-
-
-
-  //Metodo para recibir los datos desde el hijo para ocultar el modal
 
 /*
-  recibirDatos(event: boolean) {
-    this.showConfirmDeleteComponent = false; // Ocultar el componente modal
-    if (!event) {
-      this.isJuntaSelected = false;
-    }
-  }
+********************************************************************
+  Metodo para ocultar el modal
+********************************************************************
 */
 
-recibirDatos(event: boolean) {
-  this.showConfirmDeleteComponent = false; // Ocultar el componente modal
+
+  recibirDatos(event: boolean) {
+    this.showConfirmDeleteComponent = false; // Ocultar el componente modal
   }
-
-
-
-
 
   OnAddJunta(): void {
     this.showModalAgregarJuntas = true; // Mostrar el componente modal
   }
 
+
+  /*
+********************************************************************
+  Metodo para filtar los datos de la tabla
+********************************************************************
+*/
   // Metodo para filtrar la tabla
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -299,17 +320,14 @@ recibirDatos(event: boolean) {
   }
 
   recibirDatosdeMA(event: boolean) {
-
     if (!event) {
       this.isJuntaSelected = true;
-      alert( this.isJuntaSelected);
+      alert(this.isJuntaSelected);
     }
     this.showModalAgregarJuntas = false; // Ocultar el componente modal
   }
 
-  /*
-  abrirModal() {
-    this.agregarJuntaService.abrirModal('¡Hola desde el modal!');
-  }
-*/
+
+
+
 }
