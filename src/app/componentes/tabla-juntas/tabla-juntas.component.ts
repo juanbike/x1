@@ -57,49 +57,6 @@ export class TablaJuntasComponent {
   ) {}
 
 
-/*
-********************************************************************
-Muestra una notificación al usuario.
-********************************************************************
-*/
-
-  openSnackBar(message: string, action: string) {
-    const config = new MatSnackBarConfig();
-    config.panelClass = ['blue-snackbar'];
-    config.horizontalPosition = 'end'; // Posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-    config.verticalPosition = 'top'; // Posición vertical: 'top' | 'bottom'
-    config.duration = 3000; // Duración en milisegundos (opcional)
-    this.snackBar.open(message, action, config);
-  }
-
-
-  /*
-********************************************************************
-Muestra una cuadro de notificación al usuario.
-********************************************************************
-*/
-
-
-  openConfirmDialog(): void {
-    const dialogRef = this.dialog.open(BoxDialogComponent, {
-      width: '250px',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.openSnackBar('Registro eliminado', 'Cerrar');
-        // El usuario hizo clic en "Eliminar"
-        // Aquí puedes implementar la lógica de eliminación del registro
-        console.log('Registro eliminado');
-      } else {
-        // El usuario hizo clic en "Cancelar" o cerró el cuadro de diálogo
-        console.log('Eliminación cancelada');
-        this.openSnackBar('Eliminación cancelada', 'Cerrar');
-      }
-    });
-  }
-
-
 
   allJuntas: Junta_interface[] = []; //arreglo de juntas
   datosDesdeHijo!: string;
@@ -271,17 +228,24 @@ Metodo para obtener los datos de la API y mostrarlos en la tabla
 
 
   onDeleteJunta(id: string): void {
-    this.juntasService.onDeleteJunta(id).subscribe(
-      () => {
+    const juntaEncontrada = this.juntas.find(
+      (junta: { id: string }) => junta.id === id
+    );
+
+    if (juntaEncontrada) {
+      this.juntasService.onDeleteJunta(id).subscribe(
+        () => {
         // Operación exitosa
         console.log('Junta eliminada');
-        this.showMessageWithTimeout('Junta eliminada con éxito', 3000);
+        this.openSnackBar('Registro eliminado', 'Cerrar');
+
         this.fetchJuntas(); // Recarga la tabla con los nuevos datos
       },
       (error: HttpErrorResponse) => {
         //this.handleError('Error al eliminar la junta', error);
       }
     );
+    }
   }
 
 
@@ -303,9 +267,18 @@ Metodo para obtener los datos de la API y mostrarlos en la tabla
 
 
   /*
-********************************************************************
+*********************************************************************************************************************************************
   Metodo para filtar los datos de la tabla
-********************************************************************
+  Este método se utiliza para aplicar un filtro a una fuente de datos, probablemente a través de un campo de entrada.
+
+El método applyFilter toma un parámetro event de tipo Event, que generalmente se pasa desde el evento input en el campo de entrada.
+La línea const filterValue = (event.target as HTMLInputElement).value; obtiene el valor del campo de entrada y lo asigna a la variable filterValue.
+A continuación, se aplica el filtro a la fuente de datos utilizando this.dataSource.filter = filterValue.trim().toLowerCase();.
+
+Esto asume que this.dataSource es una instancia de MatTableDataSource o una clase similar que tiene una propiedad filter para aplicar el filtro.
+Si la fuente de datos tiene paginación habilitada (this.dataSource.paginator), se llama al método firstPage() en el paginador para volver
+ a la primera página de resultados.
+**************************************************************************************************************************************************
 */
   // Metodo para filtrar la tabla
   applyFilter(event: Event) {
@@ -324,6 +297,66 @@ Metodo para obtener los datos de la API y mostrarlos en la tabla
     }
     this.showModalAgregarJuntas = false; // Ocultar el componente modal
   }
+
+
+
+/*
+********************************************************************
+configuramos el snackbar Muestra una notificación al usuario.
+********************************************************************
+*/
+
+openSnackBar(message: string, action: string) {
+  const config = new MatSnackBarConfig();
+  config.panelClass = ['blue-snackbar'];
+  config.horizontalPosition = 'end'; // Posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
+  config.verticalPosition = 'top'; // Posición vertical: 'top' | 'bottom'
+  config.duration = 3000; // Duración en milisegundos (opcional)
+  this.snackBar.open(message, action, config);
+}
+
+
+/*
+******************************************************************************************************************
+este código abre un cuadro de diálogo de confirmación utilizando Angular Material, pasando un mensaje, un texto
+para el botón y un identificador asociado a la junta que se desea eliminar. Este enfoque es útil para encapsular
+la lógica del cuadro de diálogo en un componente separado (BoxDialogComponent).
+********************************************************************************************************************
+*/
+
+
+openConfirmDialog(id: string): void {
+  const dialogRef = this.dialog.open(BoxDialogComponent, {
+    //data: { id: id },
+    width: '250px',
+    data: { message: '¿Deseas eliminar esta junta?', buttonText: 'Eliminar', id: id },
+  });
+
+
+/*
+**********************************************************************************************
+Este código proporciona una estructura básica para manejar los resultados después de cerrar
+un diálogo y realizar acciones específicas en este caso eliminar una junta o no.
+************************************************************************************************
+*/
+
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result && result.confirmed) {
+
+      this.onDeleteJunta(result.id);
+
+      // El usuario hizo clic en "Eliminar"
+
+      console.log('Registro eliminado');
+    } else {
+      // El usuario hizo clic en "Cancelar" o cerró el cuadro de diálogo
+      console.log('Eliminación cancelada');
+      this.openSnackBar('Eliminación cancelada', 'Cerrar');
+    }
+  });
+}
+
 
 
 

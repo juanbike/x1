@@ -8,13 +8,27 @@
 </div>
 -->
 
-
+<!--
 <h2 mat-dialog-title>Confirmar eliminación</h2>
 <mat-dialog-content>
   <p>¿Estás seguro de que deseas eliminar este registro?</p>
+  <h1>{{ message }}</h1>
+
+
+
+
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button mat-button color="warn" (click)="onYesClick()">Eliminar</button>
+  <button mat-button (click)="onNoClick(false)">Cancelar</button>
+  <button mat-button color="warn" (click)="onYesClick(true)">Eliminar</button>
 </mat-dialog-actions>
+-->
 
+<h2 mat-dialog-title>Confirmar eliminación</h2>
+<mat-dialog-content>
+    <p>¿Estás seguro de que deseas eliminar este registro {{ this.data.id  }}?</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="openConfirmDialog(true)">Eliminar</button>
+    <button mat-button (click)="openConfirmDialog(false)">Cancelar</button>
+</mat-dialog-actions>

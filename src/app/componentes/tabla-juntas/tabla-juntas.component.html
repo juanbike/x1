@@ -116,7 +116,7 @@
       <td mat-cell *matCellDef="let row">
         <!--Creamos un vinculo de eventos para que al hacer click en el boton se ejecute el metodo OnDeleteClicked-->
         <!--<button mat-icon-button color="warn" (click)="OnDeleteClicked(row.id)">-->
-          <button mat-icon-button color="warn" (click)="openConfirmDialog()">
+          <button mat-icon-button color="warn" (click)="openConfirmDialog(row.id)">
           <mat-icon>delete</mat-icon>
           <app-notifications></app-notifications>
         </button>
