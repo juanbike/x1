@@ -23,9 +23,9 @@ import { ModalagregarjuntaComponent } from './modalagregarjunta/modalagregarjunt
 import { MatDialog } from '@angular/material/dialog'; //Cuadro de dialogo
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
-import { BoxDialogComponent } from '../box-dialog/box-dialog.component';
+import { BoxDialogComponent } from '../box-dialog/box-dialog.component'; //Cuadro de dialogo
 
-import { NotificationsComponent } from '../notifications/notifications.component';
+import { NotificationsComponent } from '../notifications/notifications.component'; //notificaciones
 @Component({
   selector: 'app-tabla-juntas',
   standalone: true,
@@ -42,7 +42,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
     MatInputModule,
     ModalagregarjuntaComponent,
     ReactiveFormsModule,
-    NotificationsComponent,
+   NotificationsComponent,
   ], //importamos los modulos
   templateUrl: './tabla-juntas.component.html',
   styleUrl: './tabla-juntas.component.css',
@@ -95,49 +95,6 @@ export class TablaJuntasComponent {
 
 
 
-
-/*
-********************************************************************************************
-Relenamos el Json JuntaPadre con datos para enviarlos al componente modal modal.component.ts
-*********************************************************************************************
-*/
-
-  juntaPadre: {
-    id: number;
-    nominal: string;
-    nominal1: string;
-    lineaOSistema: string;
-    especificacion: string;
-    schedule: string;
-    tipo_extremos: string;
-    tipo_material: string;
-    material: string;
-    diam_inch_contabilizadas: string;
-    factor_pulgadas_diametrales: string;
-    pulgadas_diametrales: string;
-    fecha: string;
-    proyectID: string;
-    usuarioID: string;
-  } = {
-    id: 58,
-    nominal: ' 32"',
-    nominal1: '32',
-    lineaOSistema: ' DING-INT-ECUASAL-E3D-PIP-Sea water system',
-    especificacion: 'A',
-    schedule: 'SDT',
-    tipo_extremos: ' Buttweld',
-    tipo_material: 'Carbon steel',
-    material: ' API 5L GR B',
-    diam_inch_contabilizadas: '45',
-    factor_pulgadas_diametrales: '1',
-    pulgadas_diametrales: '1',
-    fecha: '2023-10-14T11:33:51.858Z',
-    proyectID: '2',
-    usuarioID: '2',
-  };
-
-
-
 /*
 ********************************************************************
 Metodo para obtener los datos de la API y mostrarlos en la tabla
@@ -170,54 +127,18 @@ Metodo para obtener los datos de la API y mostrarlos en la tabla
 
         this.dataSource.paginator = this.paginator; // Asigna el paginador a la fuente de datos
         this.dataSource.sort = this.sort; // Asigna el sort a la fuente de datos
+        this.openSnackBar('Recuperando registros de la base de datos', 'Cerrar');
       },
       // Maneja errores en la solicitud HTTP
       (error: HttpErrorResponse) => {
         this.isLoading = false;
         // Mejora: Muestra un mensaje de error más amigable
         console.error('Error al cargar juntas:', error);
-        alert('Ocurrio un error al cargar las juntas. Por favor, reintente.');
-      }
+        this.openSnackBar('Ocurrio un error: `{{ error}}` al cargar las juntas', 'Cerrar');
+            }
     );
   }
 
-  //Metodo para mostrar el mensaje al usuario
-  showMessageWithTimeout(message: string, timeout: number): void {
-    this.showMessage = true;
-    this.messageText = message;
-
-    setTimeout(() => {
-      this.showMessage = false;
-      this.messageText = '';
-    }, timeout);
-  }
-
-
-
-  /*
-********************************************************************
-  Metodo para encontrar una junta
-********************************************************************
-*/
-
-
-  OnDeleteClicked(id: string): void {
-    this.showConfirmDeleteComponent = true; // Mostrar el componente modal
-    // Utiliza el método 'filter' para encontrar el objeto en 'allJuntas' con la propiedad 'id' igual al valor de 'id'.
-    const juntaEncontrada = this.juntas.find(
-      (junta: { id: string }) => junta.id === id
-    );
-
-    if (juntaEncontrada) {
-      this.onDeleteJunta(juntaEncontrada.id);
-
-      // Asignar el usuario encontrado a la propiedad 'juntaPadre' del componente modal
-      this.juntaPadre = { ...juntaEncontrada }; // Using spread operator to create a copy
-      // Muestra el usuario en formato de cadena en la consola
-    } else {
-      console.log('Usuario no encontrado');
-    }
-  }
 
 
   /*
@@ -242,7 +163,7 @@ Metodo para obtener los datos de la API y mostrarlos en la tabla
         this.fetchJuntas(); // Recarga la tabla con los nuevos datos
       },
       (error: HttpErrorResponse) => {
-        //this.handleError('Error al eliminar la junta', error);
+        this.openSnackBar('Ocurrio un error al eliminar una junta', 'Cerrar');
       }
     );
     }
@@ -257,9 +178,7 @@ Metodo para obtener los datos de la API y mostrarlos en la tabla
 */
 
 
-  recibirDatos(event: boolean) {
-    this.showConfirmDeleteComponent = false; // Ocultar el componente modal
-  }
+
 
   OnAddJunta(): void {
     this.showModalAgregarJuntas = true; // Mostrar el componente modal
