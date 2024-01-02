@@ -2,7 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { config } from './app/app.config.server';
 import { TablaJuntasComponent } from './app/componentes/tabla-juntas/tabla-juntas.component';
-import { JsonplacerholderComponent } from './app/componentes/jsonplacerholder/jsonplacerholder.component';
+
 
 
 const bootstrap = () => bootstrapApplication(TablaJuntasComponent, config);
