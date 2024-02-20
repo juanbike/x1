@@ -32,8 +32,8 @@ import { HttpClient, HttpClientModule, HttpErrorResponse, HttpHeaders } from '@a
 
 //interface y servicio
 
-import { JuntaServiceService } from '../../../data/junta-service.service';
-import { Junta_interface } from '../../../data/interface/juntas';
+import { JuntaServiceService } from '../../../services/juntas/junta-service.service';
+import { Junta_interface } from '../../../data/interface/juntas/juntas/juntas';
 
 @Component({
   selector: 'app-modalagregarjunta',

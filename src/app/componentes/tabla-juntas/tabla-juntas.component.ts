@@ -4,14 +4,13 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 //interface y servicio
-import { Junta_interface } from '../../data/interface/juntas'; //importamos la interface
-import { JuntaServiceService } from '../../data/junta-service.service'; //importamos el servicio
+import { Junta_interface } from '../../data/interface/juntas/juntas/juntas'; //importamos la interface
+import { JuntaServiceService } from '../../services/juntas/junta-service.service'; //importamos el servicio
 
 //modulos de angular material
 import { MatTableModule, MatTableDataSource } from '@angular/material/table'; //tabla
 import { MatButtonModule } from '@angular/material/button'; //botones
 import { MatIconModule } from '@angular/material/icon'; //iconos
-import { ModalComponent } from './modal/modal.component'; //componente modal para eliminar una junta
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator'; //paginador
 import { MatPaginatorModule } from '@angular/material/paginator'; //paginador
@@ -19,13 +18,13 @@ import { MatFormFieldModule } from '@angular/material/form-field'; //formulario
 import { MatInputModule } from '@angular/material/input'; //input
 import { PaginationService } from '../../services/paginacion/pagination.service'; //paginacion
 import { MatSort } from '@angular/material/sort'; //ordenamiento
-import { ModalagregarjuntaComponent } from './modalagregarjunta/modalagregarjunta.component';
+import { ModalagregarjuntaComponent } from './modalagregarjunta/modalagregarjunta.component'; // formulario modal para agregar juntas
 import { MatDialog } from '@angular/material/dialog'; //Cuadro de dialogo
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar'; //
 
-import { BoxDialogComponent } from '../box-dialog/box-dialog.component'; //Cuadro de dialogo
+import { BoxDialogComponent } from '../box-dialog/box-dialog.component'; //Cuadro de dialogo para eliminar juntas
 
-import { NotificationsComponent } from '../notifications/notifications.component'; //notificaciones
+
 @Component({
   selector: 'app-tabla-juntas',
   standalone: true,
@@ -36,13 +35,12 @@ import { NotificationsComponent } from '../notifications/notifications.component
     MatIconModule,
     CommonModule,
     RouterOutlet,
-    ModalComponent,
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
     ModalagregarjuntaComponent,
-    ReactiveFormsModule,
-    NotificationsComponent,
+    ReactiveFormsModule
+
   ], //importamos los modulos
   templateUrl: './tabla-juntas.component.html',
   styleUrl: './tabla-juntas.component.css',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Junta_interface } from '../../data/interface/juntas';
+import { Junta_interface } from '../../data/interface/juntas/juntas/juntas';
 @Injectable({
   providedIn: 'root'
 })

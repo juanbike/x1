@@ -1,0 +1,102 @@
+<div class="modal">
+  <div class="modal-content">
+
+    <form [formGroup]="soldadoresForm" (ngSubmit)="onSoldadorCreate()">
+      <mat-card>
+        <mat-card-header class="fondo">
+          <mat-card-title>Agregar Soldador</mat-card-title>
+          <mat-card-subtitle class="fondo">Ingrese los datos del Soldador</mat-card-subtitle>
+        </mat-card-header>
+
+        <!---Nombre y apellido------>
+        <mat-card-content>
+          <!---Nombre-->
+          <div>
+            <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="25" inputmode="tel" placeholder="Nombre" formControlName="nombre"
+                #nombreInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+
+            <!---Apellido------>
+             <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="25" inputmode="tel" placeholder="Apellido" formControlName="apellido"
+                #apellidoInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+
+
+          <!--- Identificacion y valor------>
+          <div>
+            <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="25" inputmode="tel" placeholder="Identificación" formControlName="identificacion"
+                #identificacionInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <!---Valor------>
+             <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="25" inputmode="tel" placeholder="Valor" formControlName="valores"
+                #valoresInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!--- Estampa  y Calificación------>
+
+          <div>
+            <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="20" inputmode="tel" placeholder="Estampa" formControlName="estampa"
+                #estampaInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <!---Calificación------>
+             <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="20" inputmode="tel" placeholder="Calificación" formControlName="calificacion"
+                #calificacionInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!--- baseMeal  y numeroP------>
+
+          <div>
+            <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="20" inputmode="tel" placeholder="BaseMeal" formControlName="baseMeal"
+                #baseMealInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <!---numeroP------>
+             <mat-form-field class="mat-50 custom-form-field">
+              <input matInput maxlength="35" inputmode="tel" placeholder="Número P" formControlName="numeroP"
+                #numeroPInput />
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+
+
+
+        </mat-card-content>
+
+        <mat-card-footer>
+          <mat-card-actions>
+            <div style="margin: 2%; text-align: right">
+              <button mat-raised-button color="accen" type="submit" (click)="notificarPadreJunta(true)">
+                Cerrar
+              </button>
+              <!--button mat-raised-button type="submit" color="primary">-->
+              <button mat-raised-button type="submit" color="primary" [disabled]="!soldadoresForm.valid||!soldadoresForm.value.nombre||!soldadoresForm.value.apellido||!soldadoresForm.value.identificacion||!soldadoresForm.value.valores||!soldadoresForm.value.estampa||!soldadoresForm.value.calificacion||!soldadoresForm.value.baseMeal||!soldadoresForm.value.numeroP">
+                Guardar
+              </button>
+              <!--<button type="submit" color="primary" [disabled]="!juntasForm.valid">Guardar</button>-->
+
+              <!---<button mat-raised-button color="warn" (click)="clearform()">
+              Limpiar
+            </button>-->
+            </div>
+          </mat-card-actions>
+        </mat-card-footer>
+      </mat-card>
+    </form>
+  </div>
+</div>

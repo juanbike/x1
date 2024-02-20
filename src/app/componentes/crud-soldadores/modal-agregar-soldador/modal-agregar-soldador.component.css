@@ -1,3 +1,32 @@
+mat-card{
+  margin: 2%;
+  text-align: left;
+}
+
+.mat-mdc-form-field {
+  width: 98%;
+  margin: 1%;
+}
+
+.mat-50{
+  width: 48%;
+  margin: 1%;
+}
+
+.mat-100{
+  width: 95%;
+  margin: 1%;
+}
+.mat-3{
+  width: 3%;
+  margin: 1%;
+}
+
+button{
+  margin: 2px;
+}
+
+
 .modal {
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -31,7 +60,8 @@ p{
   padding-top: 20px;
   text-align: right;
 }
-button{
+
+.button{
   border: none;
   padding: 10px 20px;
   margin: 0px 5px;
