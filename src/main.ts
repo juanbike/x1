@@ -3,6 +3,7 @@ import { TablaJuntasComponent } from './app/componentes/tabla-juntas/tabla-junta
 import {provideHttpClient} from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { CrudSoldadoresComponent } from './app/componentes/crud-soldadores/crud-soldadores.component';
+import { CrudSoldaduraComponent } from './app/componentes/crud-soldadura/crud-soldadura.component';
 
 
 
@@ -12,9 +13,12 @@ bootstrapApplication(TablaJuntasComponent,   {
 }).catch((err) => console.error(err));
 */
 
+
+/*
 bootstrapApplication(CrudSoldadoresComponent,   {
   providers: [provideHttpClient(), provideAnimations()],
 }).catch((err) => console.error(err));
+*/
 
 
 /*
@@ -22,3 +26,7 @@ bootstrapApplication(JsonplacerholderComponent,   {
   providers: [provideHttpClient(), provideAnimations()],
 }).catch((err) => console.error(err));
 */
+
+bootstrapApplication(CrudSoldaduraComponent,   {
+  providers: [provideHttpClient(), provideAnimations()],
+}).catch((err) => console.error(err));

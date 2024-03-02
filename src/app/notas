@@ -1,0 +1,16 @@
+"id": 2,
+    "nro_junta": "29",                  3
+    "tipo": "TW",                       4
+    "plano": "CCPSL-EDW-DVS-4016",       25
+    "hoja": "0",                         4
+    "revision": "0",                      4
+    "area": "ZONA A",                    10
+    "fase": "CPSA",                       8
+    "linea": "10''-1A3-00EGC44BR001",     30
+    "diametro": "1",                      4
+    "espesor": "80",                      4
+    "cedula": "80",                       4
+    "pn1": "1",                           4
+    "pn2": "1",                           4
+    "wds": "DVS-WPS-BPV-001",             25
+    "qrcode": null,

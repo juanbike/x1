@@ -7,6 +7,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { soldador_interface } from '../../data/interface/juntas/soldadores/soldadores';
 import { CrudSoldadoresService } from '../../services/sodadores/crud-soldadores.service';
 
+
 //modulos de angular material
 import { MatTableModule, MatTableDataSource } from '@angular/material/table'; //tabla
 import { MatButtonModule } from '@angular/material/button'; //botones
@@ -45,6 +46,7 @@ import { BoxDialogComponent } from '../box-dialog/box-dialog.component'; //Cuadr
     ModalAgregarSoldadorComponent,
     ReactiveFormsModule
   ],
+
   templateUrl: './crud-soldadores.component.html',
   styleUrl: './crud-soldadores.component.css'
 })
@@ -77,8 +79,8 @@ displayedColumns: string[] = [
   'valores',
   'estampa',
   'calificacion',
-  'baseMeal',
-  'numeroP',
+  'basemetal',
+  'numerop',
   'Acciones',
 ]; // Columnas de la tabla
 
@@ -213,6 +215,16 @@ applyFilter(event: Event) {
     this.dataSource.paginator.firstPage();
   }
 }
+
+
+/*
+***************************************************************************************************************************
+Este método maneja un evento que proviene del componente hijo. Si el evento es false, establece isSoldadorSelected en true,
+ muestra una alerta con el valor actual de isSoldadorSelected, oculta un componente modal y luego realiza una solicitud
+HTTP  para cargar los soldadores nuevamente.
+***************************************************************************************************************************
+*/
+
 
 recibirDatosdeMA(event: boolean) {
   if (!event) {

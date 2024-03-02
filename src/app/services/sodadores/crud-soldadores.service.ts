@@ -37,8 +37,8 @@ export class CrudSoldadoresService {
     valores: string;
     estampa: string;
     calificacion: string;
-    baseMeal: string;
-    numeroP: string;
+    basemetal: string;
+    numerop: string;
 
   }): Observable<soldador_interface> {
     {

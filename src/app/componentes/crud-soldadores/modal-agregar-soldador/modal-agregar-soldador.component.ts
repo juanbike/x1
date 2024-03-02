@@ -34,8 +34,8 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { CrudSoldadoresService } from '../../../services/sodadores/crud-soldadores.service';
-import { soldador_interface } from '../../../data/interface/juntas/soldadores/soldadores';
+import { CrudSoldadoresService } from '../../../services/sodadores/crud-soldadores.service'; //servicio de soldadores
+import { soldador_interface } from '../../../data/interface/juntas/soldadores/soldadores'; //interface de soldadores
 
 
 
@@ -73,16 +73,30 @@ export class ModalAgregarSoldadorComponent {
 
 
   constructor(
-    private http: HttpClient,
-    private crudSoldadoresService: CrudSoldadoresService,
-    private builder: FormBuilder,
+    private http: HttpClient, //inicializamos el http para consumir el servicio de juntas
+    private crudSoldadoresService: CrudSoldadoresService, //inicializamos el servicio
+    private builder: FormBuilder, //inicializamos el builder para crear el formulario
     private snackBar: MatSnackBar //inicializamos el snackbar para mostrar notificaciones al usuario
   ) {}
 
   formGroup!: FormGroup; // Defnimos el nombre del Formulario
 
+
+ /*
+ ******************************************************************************************************************
+ Hemos creado un EventEmitter llamado miEventoAlPadre que se utiliza para emitir eventos hacia el componente padre.
+ ******************************************************************************************************************
+ */
+
   @Output() miEventoAlPadre: EventEmitter<boolean> =
     new EventEmitter<boolean>(); // propiedad 'output'  para enviar datos al componente padre
+
+ /*
+ ********************************************************************************************************************
+  Es un método que puedes llamar desde tu componente hijo para emitir el evento hacia el componente padre. En este caso,
+   estamos emitiendo un valor booleano true, pero podrías emitir cualquier tipo de dato que desees
+ ********************************************************************************************************************
+ */
 
   notificarPadreJunta(value: boolean) {
     // Evento para enviar datos al componente padre
@@ -144,12 +158,12 @@ soldadoresForm = new FormGroup({
     Validators.minLength(3),
     Validators.maxLength(20),
   ]),
-  baseMeal: new FormControl('', [
+  basemetal: new FormControl('', [
     Validators.required,
     Validators.minLength(3),
     Validators.maxLength(20),
   ]),
-  numeroP: new FormControl('', [
+  numerop: new FormControl('', [
     Validators.required,
     Validators.minLength(3),
     Validators.maxLength(35),
@@ -188,8 +202,8 @@ onSoldadorCreate(): void {
      "valores": this.soldadoresForm.value.valores || '',
      "estampa": this.soldadoresForm.value.estampa || '',
      "calificacion": this.soldadoresForm.value.calificacion || '',
-     "baseMeal": this.soldadoresForm.value.baseMeal || '',
-     "numeroP": this.soldadoresForm.value.numeroP || ''
+     "basemetal": this.soldadoresForm.value.basemetal || '',
+     "numerop": this.soldadoresForm.value.numerop || ''
 
   };
 
